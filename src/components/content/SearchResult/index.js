@@ -25,7 +25,11 @@ class SearchResult extends Component {
   }
 
   getVideos() {
-    const { match: { params: { searchParam } } } = this.props;
+    const {
+      match: {
+        params: { searchParam },
+      },
+    } = this.props;
 
     searchVideos(searchParam).then(
       (data) => this.setState({ data: data.items.slice(0, 24) }),
