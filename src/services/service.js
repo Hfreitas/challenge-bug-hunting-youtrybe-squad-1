@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3';
 const YOUTUBE_AUTH_KEY = () => {
   const auth =
@@ -8,52 +10,49 @@ const YOUTUBE_AUTH_KEY = () => {
 };
 
 export const searchVideos = async (searchText) => {
-  const URL = `${YOUTUBE_API_URL}/search?part=snippet&q=${searchText}&type=video&maxResults=25&key=${YOUTUBE_AUTH_KEY()}`;
-
-  try {
-    const response = await fetch(URL);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
+  const URL = `${YOUTUBE_API_URL}/search?part=snippet&q=${encodeURIComponent(
+    searchText,
+  )}&type=video&maxResults=25&key=${YOUTUBE_AUTH_KEY()}`;
+  return axios.get(URL).then(
+    (response) => Promise.resolve(response),
+    (response) => Promise.reject(response.message),
+  );
 };
 
 export const getVideoInfo = async (videoId) => {
-  const urlParams = `part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/videos?${urlParams}`;
+  const urlParams = `part=snippet%2CcontentDetails%2Cstatistics&id=${encodeURIComponent(
+    videoId,
+  )}&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/videos?${encodeURIComponent(urlParams)}`;
 
-  try {
-    const response = await fetch(URL);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
+  return axios.get(URL).then(
+    (response) => Promise.resolve(response),
+    (response) => Promise.reject(response.message),
+  );
 };
 
 export const getVideoComments = async (videoId) => {
-  const urlParams = `part=snippet&videoId=${videoId}&textFormat=plainText&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/commentThreads?${urlParams}`;
+  const urlParams = `part=snippet&videoId=${encodeURIComponent(
+    videoId,
+  )}&textFormat=plainText&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/commentThreads?${encodeURIComponent(
+    urlParams,
+  )}`;
 
-  try {
-    const response = await fetch(URL);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
+  return axios.get(URL).then(
+    (response) => Promise.resolve(response),
+    (response) => Promise.reject(response.message),
+  );
 };
 
 export const getRelatedVideos = async (videoId) => {
-  const urlParams = `part=snippet&relatedToVideoId=${videoId}&type=video&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/search?${urlParams}`;
+  const urlParams = `part=snippet&relatedToVideoId=${encodeURIComponent(
+    videoId,
+  )}&type=video&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/search?${encodeURIComponent(urlParams)}`;
 
-  try {
-    const response = await fetch(URL);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return error;
-  }
+  return axios.get(URL).then(
+    (response) => Promise.resolve(response),
+    (response) => Promise.reject(response.message),
+  );
 };
