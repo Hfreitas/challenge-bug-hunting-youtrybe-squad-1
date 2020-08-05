@@ -4,9 +4,9 @@ import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import SearchResult from '../components/content/SearchResult/index';
 import App from '../App';
-import mockSearchVideo from '../__mocks__/mockSearchVideo';
-import mockGetVideoInfo from '../__mocks__/mockGetVideoInfo';
-import mockGetVideoComments from '../__mocks__/mockGetVideoComments';
+import mockSearchVideo from '../mocks/mockSearchVideo';
+import mockGetVideoInfo from '../mocks/mockGetVideoInfo';
+import mockGetVideoComments from '../mocks/mockGetVideoComments';
 import * as api from '../api/service'
 
 jest.mock('react-router-dom', () => {

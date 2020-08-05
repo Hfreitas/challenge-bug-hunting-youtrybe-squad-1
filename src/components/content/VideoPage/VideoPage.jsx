@@ -5,7 +5,7 @@ import VideoPlayerDescription from './VideoPlayer/VideoPlayerDescription';
 import VideoPlayerInfo from './VideoPlayer/VideoPlayerInfo';
 import VideoPlayerComments from './VideoPlayerComments/VideoPlayerComments';
 import VideoSideBar from './VideoSideBar/VideoSideBar';
-import { getVideoInfo, getVideoComments } from '../../../api/service';
+import { getVideoInfo, getVideoComments } from '../../../services/service';
 
 class VideoPage extends Component {
   constructor(props) {

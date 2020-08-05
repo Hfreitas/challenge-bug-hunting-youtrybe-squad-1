@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import VideoCard from './VideoCard/VideoCard';
 
 import '../../../css/sideBar.css';
-import { searchVideos } from '../../../api/service';
+import { searchVideos } from '../../../services/service';
 
 class SearchResult extends Component {
   constructor(props) {
