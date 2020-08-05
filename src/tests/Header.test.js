@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-jest.mock('../api/service');
+jest.mock('../services/service');
 api.searchVideos.mockImplementation(() => Promise.resolve(mockSearchVideo));
 
 function renderWithRouter(ui, routeConfigs = {}) {
