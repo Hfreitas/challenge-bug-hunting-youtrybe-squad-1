@@ -20,10 +20,8 @@ export const searchVideos = async (searchText) => {
 };
 
 export const getVideoInfo = async (videoId) => {
-  const urlParams = `part=snippet%2CcontentDetails%2Cstatistics&id=${encodeURIComponent(
-    videoId,
-  )}&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/videos?${encodeURIComponent(urlParams)}`;
+  const urlParams = `part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/videos?${urlParams}`;
 
   return axios.get(URL).then(
     (response) => Promise.resolve(response),
@@ -32,12 +30,8 @@ export const getVideoInfo = async (videoId) => {
 };
 
 export const getVideoComments = async (videoId) => {
-  const urlParams = `part=snippet&videoId=${encodeURIComponent(
-    videoId,
-  )}&textFormat=plainText&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/commentThreads?${encodeURIComponent(
-    urlParams,
-  )}`;
+  const urlParams = `part=snippet&videoId=${videoId}&textFormat=plainText&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/commentThreads?${urlParams}`;
 
   return axios.get(URL).then(
     (response) => Promise.resolve(response),
@@ -46,10 +40,8 @@ export const getVideoComments = async (videoId) => {
 };
 
 export const getRelatedVideos = async (videoId) => {
-  const urlParams = `part=snippet&relatedToVideoId=${encodeURIComponent(
-    videoId,
-  )}&type=video&key=${YOUTUBE_AUTH_KEY()}`;
-  const URL = `${YOUTUBE_API_URL}/search?${encodeURIComponent(urlParams)}`;
+  const urlParams = `part=snippet&relatedToVideoId=${videoId}&type=video&key=${YOUTUBE_AUTH_KEY()}`;
+  const URL = `${YOUTUBE_API_URL}/search?${urlParams}`;
 
   return axios.get(URL).then(
     (response) => Promise.resolve(response),

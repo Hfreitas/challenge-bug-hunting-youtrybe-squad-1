@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Redirect, useParams, useLocation } from 'react-router-dom';
 import VideoPlayer from './VideoPlayer/VideoPlayer';
 import VideoPlayerDescription from './VideoPlayer/VideoPlayerDescription';
 import VideoPlayerInfo from './VideoPlayer/VideoPlayerInfo';
@@ -7,47 +7,57 @@ import VideoPlayerComments from './VideoPlayerComments/VideoPlayerComments';
 import VideoSideBar from './VideoSideBar/VideoSideBar';
 import { getVideoInfo, getVideoComments } from '../../../services/service';
 
-class VideoPage extends Component {
-  constructor(props) {
-    super(props);
+function VideoPage() {
+  const { videoId: id } = useParams();
+  const {
+    state: { data: relatedData },
+  } = useLocation();
 
-    const {
-      match: { params: { videoId } },
-      location: { state: { data } },
-    } = this.props;
+  const [videoId, setVideoId] = useState(id);
+  const [relatedVideos, setRelatedVideos] = useState(relatedData);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [videoInfo, setVideoInfo] = useState(null);
+  const [videoComments, setVideoComments] = useState(null);
 
-    this.state = {
-      videoId,
-      relatedVideos: data,
-      shouldRedirect: false,
-      videoInfo: null,
-      videoComments: null,
+  const mountVideoPage = () => {
+    setShouldRedirect(false);
+    getVideoInfo(videoId).then(
+      ({ data }) => setVideoInfo(data.items[0]),
+      (message) => console.log(message),
+    );
+    getVideoComments(videoId).then(
+      ({ data }) => setVideoComments([...data.items]),
+      (message) => console.log(message),
+    );
+  };
+
+  useEffect(() => {
+    mountVideoPage();
+    return () => {
+      setVideoId(id);
+      setRelatedVideos(relatedData);
+      setShouldRedirect(false);
+      setVideoInfo(null);
+      setVideoComments(null);
     };
+  }, []);
 
-    this.handleSelectedVideo = this.handleSelectedVideo.bind(this);
-  }
-
-  componentDidMount() {
-    this.mountVideoPage();
-  }
-
-  handleSelectedVideo(videoId) {
-    this.setState({ videoId }, () => {
-      getVideoInfo(videoId).then((data) => this.setState({ videoInfo: data.items[0] }));
-      getVideoComments(videoId).then((data) => this.setState({ videoComments: data.items }));
+  const handleSelectedVideo = () => {
+    setVideoId({ videoId }, () => {
+      getVideoInfo(videoId).then(
+        ({ data }) => setVideoInfo(data.items[0]),
+        (message) => console.log(message),
+      );
+      getVideoComments(videoId).then(
+        ({ data }) => setVideoComments([...data.items]),
+        (message) => console.log(message),
+      );
     });
 
-    return this.setState({ shouldRedirect: true });
-  }
+    return setShouldRedirect(true);
+  };
 
-  mountVideoPage() {
-    const { videoId } = this.state;
-    this.setState({ shouldRedirect: false });
-    getVideoInfo(videoId).then((data) => this.setState({ videoInfo: data.items[0] }));
-    getVideoComments(videoId).then((data) => this.setState({ videoComments: data.items }));
-  }
-
-  renderVideoPage(videoId, videoInfo, videoComments, relatedVideos) {
+  const renderVideoPage = () => {
     return (
       <main>
         <section className="player">
@@ -69,43 +79,28 @@ class VideoPage extends Component {
         <section className="sidebar">
           <VideoSideBar
             relatedVideos={relatedVideos}
-            handleSelectedVideo={this.handleSelectedVideo}
+            handleSelectedVideo={handleSelectedVideo}
           />
         </section>
       </main>
     );
-  }
+  };
 
-  render() {
-    const {
-      videoId,
-      videoComments,
-      shouldRedirect,
-      relatedVideos,
-      videoInfo,
-    } = this.state;
+  if (!videoInfo || !videoComments) return <main />;
 
-    if (!videoInfo || !videoComments) return <main />;
-
-    if (shouldRedirect) {
-      this.setState({ shouldRedirect: false });
-      return (
-        <Redirect
-          to={{
-            pathname: `/watch/${videoId}`,
-            state: { data: relatedVideos },
-          }}
-        />
-      );
-    }
-
-    return this.renderVideoPage(
-      videoId,
-      videoInfo,
-      videoComments,
-      relatedVideos,
+  if (shouldRedirect) {
+    this.setState({ shouldRedirect: false });
+    return (
+      <Redirect
+        to={{
+          pathname: `/watch/${videoId}`,
+          state: { data: relatedVideos },
+        }}
+      />
     );
   }
+
+  return renderVideoPage(videoId, videoInfo, videoComments, relatedVideos);
 }
 
 export default VideoPage;

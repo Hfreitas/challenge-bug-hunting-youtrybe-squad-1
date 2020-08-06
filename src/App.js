@@ -14,16 +14,12 @@ function App() {
         <Header />
         <Switch>
           <Route exact path="/" component={InitialPage} />
-          <Route
-            exact
-            path="/watch/:videoId"
-            render={(props) => <VideoPage {...props} />}
-          />
-          <Route
-            exact
-            path="/results/:searchParam"
-            render={(props) => <SearchResult {...props} />}
-          />
+          <Route path="/watch/:videoId">
+            <VideoPage />
+          </Route>
+          <Route exact path="/results/:searchParam">
+            <SearchResult />
+          </Route>
           <Route path="*" component={NotFound} />
         </Switch>
       </div>
