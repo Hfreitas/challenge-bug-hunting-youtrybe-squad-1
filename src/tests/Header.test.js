@@ -3,25 +3,24 @@ import { render, fireEvent, waitFor } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import App from '../App';
-import mockSearchVideo from '../__mocks__/mockSearchVideo';
-import * as api from '../api/service'
+import mockSearchVideo from '../mocks/mockSearchVideo';
+import * as api from '../services/service';
 
 jest.mock('react-router-dom', () => {
   const moduloOriginal = jest.requireActual('react-router-dom');
   return {
     ...moduloOriginal,
-    BrowserRouter: ({ children }) => (<div>{children}</div>),
+    BrowserRouter: ({ children }) => <div>{children}</div>,
   };
-})
+});
 
-jest.mock('../api/service');
-api.searchVideos.mockImplementation(
-  () => Promise.resolve(mockSearchVideo)
-);
+jest.mock('../services/service');
+api.searchVideos.mockImplementation(() => Promise.resolve(mockSearchVideo));
 
 function renderWithRouter(ui, routeConfigs = {}) {
   const route = routeConfigs.route || '/';
-  const history = routeConfigs.history || createMemoryHistory({ initialEntries: [route] });
+  const history =
+    routeConfigs.history || createMemoryHistory({ initialEntries: [route] });
   return {
     ...render(<Router history={history}>{ui}</Router>),
     history,
@@ -30,22 +29,25 @@ function renderWithRouter(ui, routeConfigs = {}) {
 
 describe('Funcionalidades Componente Header', () => {
   it('Renderiza apenas um link na tela', () => {
-    const { container } = renderWithRouter(<App />)
-    const links = container.querySelectorAll('a')
-    expect(links.length).toBe(1)
-    expect(links[0].href).toMatch('/results')
-  })
+    const { container } = renderWithRouter(<App />);
+    const links = container.querySelectorAll('a');
+    expect(links.length).toBe(1);
+    expect(links[0].href).toMatch('/results');
+  });
 
   it('Ao fazer uma busca redireciona a página de resultados', async () => {
-    const { getByRole, getByPlaceholderText, history } = renderWithRouter(<App />);
-    expect(history.location.pathname).toBe('/')
+    const { getByRole, getByPlaceholderText, history } = renderWithRouter(
+      <App />,
+    );
+    expect(history.location.pathname).toBe('/');
 
     const searchText = 'bugs';
-    fireEvent.change(getByPlaceholderText(/search/i), { target: { value: searchText } })
-    fireEvent.click(getByRole('link'))
+    fireEvent.change(getByPlaceholderText(/search/i), {
+      target: { value: searchText },
+    });
+    fireEvent.click(getByRole('link'));
 
     await waitFor(() => expect(api.searchVideos).toHaveBeenCalled());
     expect(history.location.pathname).toBe(`/results/${searchText}`);
-
   });
-})
+});

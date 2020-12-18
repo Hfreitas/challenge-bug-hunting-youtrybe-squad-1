@@ -3,31 +3,30 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import VideoPage from '../components/content/VideoPage/VideoPage';
-import mockSearchVideo from '../__mocks__/mockSearchVideo';
-import mockGetVideoInfo from '../__mocks__/mockGetVideoInfo';
-import mockGetVideoComments from '../__mocks__/mockGetVideoComments';
-import * as api from '../api/service';
+import mockSearchVideo from '../mocks/mockSearchVideo';
+import mockGetVideoInfo from '../mocks/mockGetVideoInfo';
+import mockGetVideoComments from '../mocks/mockGetVideoComments';
+import * as api from '../services/service';
 
 jest.mock('react-router-dom', () => {
   const moduloOriginal = jest.requireActual('react-router-dom');
   return {
     ...moduloOriginal,
-    BrowserRouter: ({ children }) => (<div>{children}</div>),
+    BrowserRouter: ({ children }) => <div>{children}</div>,
     useHistory: () => ({ push: jest.fn() }),
   };
 });
 
-jest.mock('../api/service');
-api.getVideoInfo.mockImplementation(
-  () => Promise.resolve(mockGetVideoInfo),
-);
-api.getVideoComments.mockImplementation(
-  () => Promise.resolve(mockGetVideoComments),
+jest.mock('../services/service');
+api.getVideoInfo.mockImplementation(() => Promise.resolve(mockGetVideoInfo));
+api.getVideoComments.mockImplementation(() =>
+  Promise.resolve(mockGetVideoComments),
 );
 
 function renderWithRouter(ui, routeConfigs = {}) {
   const route = routeConfigs.route || '/';
-  const history = routeConfigs.history || createMemoryHistory({ initialEntries: [route] });
+  const history =
+    routeConfigs.history || createMemoryHistory({ initialEntries: [route] });
   return {
     ...render(<Router history={history}>{ui}</Router>),
     history,

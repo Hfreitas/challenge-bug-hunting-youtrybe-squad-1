@@ -1,3 +1,8 @@
+.material-icons:focus,
+button:hover {
+  cursor: pointer;
+}
+
 .channel-info {
   border-bottom: 1px solid #ccc;
   display: flex;
@@ -65,9 +70,4 @@
 
 .avatar i {
   font-size: 3.4rem;
-}
-
-.material-icons:hover,
-button:hover {
-  cursor: pointer;
 }

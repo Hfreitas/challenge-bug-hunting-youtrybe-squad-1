@@ -1,30 +1,25 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 
-class VideoPlayerCommentsInfo extends Component {
-  render() {
-    const { statisticsInfo } = this.props;
-    return (
-      <Fragment>
-        <div className="comment-toolbar">
-          <div className="comment-count">
-            <span>
-              {statisticsInfo.commentCount}
-              {' '}
-            </span>
-            <span>Comments</span>
-          </div>
-          <div className="comment-count">
-            <i className="material-icons">sort</i>
-            <span>SORT BY</span>
-          </div>
+function VideoPlayerCommentsInfo(props) {
+  const { statisticsInfo } = props;
+  return (
+    <>
+      <div className="comment-toolbar">
+        <div className="comment-count">
+          <span>{statisticsInfo.commentCount} </span>
+          <span>Comments</span>
         </div>
-        <div className="add-comment">
-          <i className="material-icons account-icon">account_circle</i>
-          <input type="text" placeholder="Add a public comment..." />
+        <div className="comment-count">
+          <i className="material-icons">sort</i>
+          <span>SORT BY</span>
         </div>
-      </Fragment>
-    );
-  }
+      </div>
+      <div className="add-comment">
+        <i className="material-icons account-icon">account_circle</i>
+        <input type="text" placeholder="Add a public comment..." />
+      </div>
+    </>
+  );
 }
 
 export default VideoPlayerCommentsInfo;
